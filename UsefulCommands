@@ -6,3 +6,6 @@ You can also use a shorthand alias for kubectl that also works with completion:
 
 alias k=kubectl
 complete -F __start_kubectl k
+
+
+kubectl get --raw /api/v1/nodes | python -m json.tool | less
