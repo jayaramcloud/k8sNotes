@@ -1,0 +1,4 @@
+k create deployment nginx1 --image=nginx
+kubectl describe deployment
+k get deployment
+kubectl scale --replicas=3 deployment/nginx
