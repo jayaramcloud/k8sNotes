@@ -1,0 +1,36 @@
+jayaram_linux1@cloudshell:~/kubernetes-engine-samples/hello-app (dbconn01)$ k get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+hello-web-6c84597998-bz5b7   1/1     Running   0          150m
+hello-web-6c84597998-fl22c   1/1     Running   0          107m
+hello-web-6c84597998-nmshl   1/1     Running   0          107m
+
+jayaram_linux1@cloudshell:~/kubernetes-engine-samples/hello-app (dbconn01)$ k exec -it hello-web-6c84597998-nmshl -- /bin/sh
+
+/ # find / -size +4k -exec ls -larSh {} \+
+-rw-r--r--    1 root     root        4.1K Jan 24 07:45 /etc/udhcpd.conf
+-rwxr-xr-x    1 root     root        6.4K Mar 15 14:27 /etc/ssl/misc/tsget.pl
+-rwxr-xr-x    1 root     root        7.4K Mar 15 14:27 /etc/ssl/misc/CA.pl
+-rw-r--r--    1 root     root        9.5K May  9 20:49 /lib/apk/db/scripts.tar
+-rw-r--r--    1 root     root       10.7K Mar 15 14:27 /etc/ssl/openssl.cnf.dist
+-rw-r--r--    1 root     root       10.7K Mar 15 14:27 /etc/ssl/openssl.cnf
+-rw-r--r--    1 root     root       11.0K May  9 20:49 /lib/apk/db/installed
+-rwxr-xr-x    1 root     root       13.5K Mar 15 14:28 /usr/lib/engines-1.1/capi.so
+-rwxr-xr-x    1 root     root       13.5K Mar 15 14:28 /usr/lib/engines-1.1/padlock.so
+-rwxr-xr-x    1 root     root       13.6K Jan 24 07:45 /usr/bin/ssl_client
+-rwxr-xr-x    1 root     root       13.6K Jan 23 20:46 /sbin/mkmntdirs
+-r--r--r--    1 root     root       19.8K Jun  2 21:00 /proc/config.gz
+-rwxr-xr-x    1 root     root       22.2K Mar 15 14:28 /usr/lib/engines-1.1/afalg.so
+-rwxr-xr-x    1 root     root       24.6K Mar 19 09:56 /usr/bin/iconv
+-rw-r--r--    1 root     root       35.3K Jan 23 20:46 /etc/services
+-rwxr-xr-x    1 root     root       35.9K Mar 19 09:56 /usr/bin/getconf
+-rwxr-xr-x    1 root     root       50.7K Mar 19 09:56 /usr/bin/getent
+-rwxr-xr-x    1 root     root       81.8K Nov 15  2018 /usr/bin/scanelf
+-rwxr-xr-x    1 root     root       93.8K Jan  6 14:23 /usr/lib/libtls-standalone.so.1.0.0
+-rwxr-xr-x    1 root     root       97.8K Nov 15  2018 /lib/libz.so.1.2.11
+-rwxr-xr-x    1 root     root      206.4K Jan 10 09:28 /sbin/apk
+-rw-r--r--    1 root     root      227.1K Jan 29 16:27 /etc/ssl/cert.pem
+-rwxr-xr-x    1 root     root      507.5K Mar 15 14:28 /lib/libssl.so.1.1
+-rwxr-xr-x    1 root     root      570.6K Mar 19 09:56 /lib/ld-musl-x86_64.so.1
+-rwxr-xr-x    1 root     root      777.6K Jan 24 07:45 /bin/busybox
+-rwxr-xr-x    1 root     root        2.5M Mar 15 14:28 /lib/libcrypto.so.1.1
+-rwxr-xr-x    1 root     root        5.6M Jun  2 18:25 /hello-app
