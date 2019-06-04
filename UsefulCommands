@@ -6,6 +6,53 @@ complete -F __start_kubectl k
 
 You can also use a shorthand alias for kubectl that also works with completion:
 
+k get pods,nodes,svc,deployments,ns
+k describe pods,nodes,svc,deployments
+k config get-contexts
+k config current-context
+k cluster-info
+k cluster-info  dump
+k get componentstatuses
+k get pods -o wide
+k edit deployments guestbook -o yaml
+
+k exec -it hello-web-6c84597998-nmshl -- /bin/sh
+
+
+k apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
+k proxy
+
+
+k explain service
+
+k api-resources
+k api-resources --namespaced=true
+for x in `kubectl api-resources --verbs=list --namespaced -o name`;do echo ---------------------- $x; kubectl get $x;done
+for x in `kubectl api-resources | cut -f1 -d" "`;do echo ---------------------- $x; kubectl get $x;done
+
+k api-versions
+k get apiservices.apiregistration.k8s.io
+k api-resources --api-group=extensions
+k create -f mypod.yml --dry-run
+
+k get pods --all-namespaces  --show-labels
+k get pods --all-namespaces  --show-labels -l k8s-app=glbc
+
+less .kube/cache/discovery/
+k logs kube-dns-78d5dcc986-kdchg -n kube-system -o name
+k get crd
+
+k get pods --v=7 
+k get nodes --v=8 -o wide
+for x in `k get pods -o name | cut -f2 -d"/" `;do k --v=7 get pods $x;done
+
+for x in `k get pods -o name | cut -f2 -d"/" `;do k logs  $x;done
+
+k top pod
+k top node
+
+
+
 
 
 
