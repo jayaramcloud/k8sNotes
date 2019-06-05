@@ -6,6 +6,7 @@ complete -F __start_kubectl k
 
 You can also use a shorthand alias for kubectl that also works with completion:
 
+k get all
 k get pods,nodes,svc,deployments,ns
 k describe pods,nodes,svc,deployments
 k config get-contexts
@@ -14,6 +15,7 @@ k cluster-info
 k cluster-info  dump
 k get componentstatuses
 k get pods -o wide
+k get pod guestbook-84457db45c-cllfb -o yaml --export
 k edit deployments guestbook -o yaml
 
 k exec -it hello-web-6c84597998-nmshl -- /bin/sh
@@ -49,11 +51,35 @@ for x in `k get pods -o name | cut -f2 -d"/" `;do k --v=7 get pods $x;done
 for x in `k get pods -o name | cut -f2 -d"/" `;do k logs  $x;done
 
 k top pod
+k top pod guestbook-84457db45c-cllf
 k top node
 
+# List only worker nodes
+kubectl get node --selector='!node-role.kubernetes.io/master'
 
-
-
+kubectl get pods --field-selector=status.phase=Running
+NAME                         READY   STATUS    RESTARTS   AGE
+guestbook-84457db45c-cllfb   1/1     Running   0          52m
+kubectl get pods --field-selector=status.phase='!Running'
 
 
 kubectl get --raw /api/v1/nodes | python -m json.tool | less
+
+
+k get pod/guestbook-84457db45c-mm6kq --output=json
+kubectl get pods -o json | jq '.items[].metadata.creationTimestamp'
+
+for item in $( kubectl get pod --output=name); do printf "Labels for %s\n" "$item" | grep --color -E '[^/]+$' && kubectl get "$item" --output=json | jq -r -S '.metadata.labels | to_entries | .[] | " \(.key)=\(.value)"' 2>/dev/null; printf "\n"; done
+Labels for pod/guestbook-84457db45c-cllfb
+ app=guestbook
+ pod-template-hash=84457db45c
+
+Labels for pod/guestbook-84457db45c-mm6kq
+ app=guestbook
+ pod-template-hash=84457db45c
+ 
+ 
+ k label pods  guestbook-84457db45c-cllfb   new-label=awesome
+ 
+k config TAB TAB
+ kubectl autoscale deployment [deployment name] --min=2 --max=5 --cpu-percent=80
