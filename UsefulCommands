@@ -1,10 +1,19 @@
 
 source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+
+You can also use a shorthand alias for kubectl that also works with completion:
 alias k=kubectl
 complete -F __start_kubectl k
 
-You can also use a shorthand alias for kubectl that also works with completion:
+
+kubectl create deployment guestbook --image=ibmcom/guestbook:v1
+kubectl scale  deployment guestbook --replicas=2
+kubectl set image deployment/guestbook guestbook=ibmcom/guestbook:v2
+
+kubectl expose deployment guestbook --type=LoadBalancer --port 80 --target-port 3000
+
+
 
 k get all
 k get pods,nodes,svc,deployments,ns
