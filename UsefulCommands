@@ -68,6 +68,7 @@ kubectl get --raw /api/v1/nodes | python -m json.tool | less
 
 k get pod/guestbook-84457db45c-mm6kq --output=json
 kubectl get pods -o json | jq '.items[].metadata.creationTimestamp'
+ k get pods -o  jsonpath='{.items[*].spec.containers[].image}{"\n"}'
 
 for item in $( kubectl get pod --output=name); do printf "Labels for %s\n" "$item" | grep --color -E '[^/]+$' && kubectl get "$item" --output=json | jq -r -S '.metadata.labels | to_entries | .[] | " \(.key)=\(.value)"' 2>/dev/null; printf "\n"; done
 Labels for pod/guestbook-84457db45c-cllfb
