@@ -14,6 +14,9 @@ kubectl set image deployment/guestbook guestbook=ibmcom/guestbook:v2
 kubectl expose deployment guestbook --type=LoadBalancer --port 80 --target-port 3000
 
 
+k create deployment kuard --image=gcr.io/kuar-demo/kuard-amd64:1
+kubectl expose deployment kuard --type=LoadBalancer --port=80 --target-port=8080
+
 
 k get all
 k get pods,nodes,svc,deployments,ns
@@ -90,6 +93,17 @@ Labels for pod/guestbook-84457db45c-mm6kq
  
  
  k label pods  guestbook-84457db45c-cllfb   new-label=awesome
+ 
+ 
+ # Check which nodes are ready
+JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
+ && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
+
+# List all Secrets currently in use by a pod
+kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
+
+# List Events sorted by timestamp
+kubectl get events --sort-by=.metadata.creationTimestamp
  
 k config TAB TAB
  kubectl autoscale deployment [deployment name] --min=2 --max=5 --cpu-percent=80
