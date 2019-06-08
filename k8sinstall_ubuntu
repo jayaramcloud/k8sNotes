@@ -1,0 +1,58 @@
+apt-get update && apt-get install apt-transport-https ca-certificates curl software-properties-common -y
+apt-get upgrade -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+add-apt-repository   "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+apt-get update && apt-get install docker-ce=18.06.2~ce~3-0~ubuntu -y
+
+cat > /etc/docker/daemon.json <<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+
+mkdir -p /etc/systemd/system/docker.service.d
+systemctl daemon-reload 
+systemctl restart docker
+apt-get update && apt-get install -y apt-transport-https curl -y
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+
+cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+systemctl daemon-reload 
+systemctl restart kubelet.service 
+# for the Master only
+kubeadm init --pod-network-cidr=192.168.0.0/16 | tee k.logs
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+source <(kubectl completion bash) 
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+alias k=kubectl
+complete -F __start_kubectl k
+
+kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml
+
+kubectl get nodes
+kubectl cluster-info
+
+kubectl taint nodes --all node-role.kubernetes.io/master-
+kubectl get nodes
+
+#in the nodes
+
+kubeadm join 10.128.0.15:6443 --token mdzx06.yyoeqmwj66rv2kolk8p \
+    --discovery-token-ca-cert-hash sha256:f1eda2eac739dfd67d1fwvwwefb150ef2102cdc714f83e7cd86be8fd635aea436466d9b
+
+docker run -it --privileged --net=host   -v /:/rootfs -v $CONFIG_DIR:$CONFIG_DIR -v $LOG_DIR:/var/result   k8s.gcr.io/node-test:0.2
