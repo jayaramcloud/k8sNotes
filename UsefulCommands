@@ -35,7 +35,7 @@ k exec -it hello-web-6c84597998-nmshl -- /bin/sh
 
 k apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
 k proxy
-
+k proxy --address 0.0.0.0 --accept-hosts '.*'
 
 k explain service
 
