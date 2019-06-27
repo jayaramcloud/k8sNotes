@@ -3,12 +3,13 @@ swapoff -a
 vi /etc/fstab
 setenforce 0
 sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 yum install -y yum-utils device-mapper-persistent-data lvm2
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 yum install docker-ce
 
-vi /etc/yum.repos.d/kubernetes.repo
 
+cat > /etc/yum.repos.d/kubernetes.repo1 <<EOF
 [kubernetes]
 name=Kubernetes
 baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
@@ -17,7 +18,7 @@ gpgcheck=1
 repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
         https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-
+EOF
 
 yum install -y kubelet kubeadm kubectl
 sed -i 's/cgroup-driver=systemd/cgroup-driver=cgroupfs/g' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
@@ -26,13 +27,23 @@ docker -v
 sysctl docker start
 systemctl restart docker && systemctl enable docker
 systemctl restart kubelet && systemctl enable kubelet
-firewall-cmd --permanent --add-port=6443/tcp
-firewall-cmd --permanent --add-port=2379-2380/tcp
-firewall-cmd --permanent --add-port=10250/tcp
-firewall-cmd --permanent --add-port=10251/tcp
-firewall-cmd --permanent --add-port=10252/tcp
-firewall-cmd --permanent --add-port=10255/tcp
+firewall-cmd --permanent --add-port=1-65000/udp
+firewall-cmd --permanent --add-port=1-65000/tcp
 firewall-cmd --reload
-sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher:latest
+# TILL HERE , Master and the node tasks are the same 
+kubeadm init --pod-network-cidr=192.168.0.0/16 | tee k.logs
+mkdir -p $HOME/.kube
+cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
+#Note kubeadmin join output
+
+#NODE:
+ kubeadm join --token a3bd48.1bc42347c3b35851 192.168.1.30:6443
+
+#sudo docker run -d --restart=unless-stopped -p 80:80 -p 443:443 rancher/rancher:latest
 docker ps
 docker images
+
+NODE : 
+
+
