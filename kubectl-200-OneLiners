@@ -1,9 +1,6 @@
 kubectl apply -f calico.yaml
 kubectl apply -f rbac-kdd.yaml
 kubectl apply -f rolebindprod.yaml
-kubectl apply -f rolebind.yaml
-kubectl apply -f role-prod.yaml
-kubectl apply -f taint.yaml
 kubectl apply -n sock-shop -f complete-demo.yaml
 kubectl cluster-info
 kubectl cluster-info dump
@@ -79,15 +76,10 @@ kubectl get deployment nginx --export -o json
 kubectl get deployment nginx -o yaml
 kubectl get deployment nginx -o yaml > first.yaml
 kubectl get deployments
-kubectl get deployments --all-namespaces
 kubectl get deployments nginx --export -o yaml
-kubectl get deployments secondapp -o yaml |grep label -A2
-kubectl get deployment thirdpage -o yaml |grep -A2 Label
+kubectl get deployments secondapp -o yaml |grep -i label -A2
 kubectl get deploy --namespace=small
 kubectl get deploy,pod
-kubectl get ds
-kubectl get ds ds-one -o yaml
-kubectl get ds ds-one -o yaml --export > ds2.yaml
 kubectl get endpoints
 kubectl get ep
 kubectl get ep nginx
@@ -99,14 +91,11 @@ kubectl get jobs.batch sleepy -o yaml
 kubectl get job sleepy -o yaml
 kubectl get LimitRange
 kubectl get LimitRange --all-namespaces
-kubectl get namespace
-kubectl get node
-kubectl get nodes
+kubectl get ns,namespace
+kubectl get node,nodes
 kubectl get nodes --show-labels
-kubectl get po
+kubectl get po,pod,pods
 kubectl get po --all-namespaces
-kubectl get pod
-kubectl get pods
 kubectl get pods --all-namespaces
 kubectl get pods -l app=nginx --all-namespaces
 kubectl get po -L system
@@ -138,7 +127,6 @@ kubectl -n kube-system edit svc kubernetes-dashboard
 kubectl -n kube-system get svc kubernetes-dashboard
 kubectl -n kube-system logs metrics-server<TAB>
 kubectl -n kube-system logs <Tab><Tab>
-kubectl -n low-usage-limit delete deployment hog
 kubectl -n production describe role dev-prod
 kubectl -n small delete pvc/pvc-one
 kubectl -n small describe deploy/nginx-nfs
