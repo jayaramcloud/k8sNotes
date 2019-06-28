@@ -1,0 +1,165 @@
+ kubectl apply -f calico.yaml
+ kubectl apply -f rbac-kdd.yaml
+ kubectl apply -f rolebindprod.yaml
+ kubectl apply -f rolebind.yaml
+ kubectl apply -f role-prod.yaml
+ kubectl apply -f taint.yaml
+ kubectl apply -n sock-shop -f complete-demo.yaml
+ kubectl cluster-info
+ kubectl cluster-info dump
+ kubectl config get-contexts
+ kubectl config set-credentials -h
+ kubectl config <Tab><Tab>
+ kubectl config view
+ kubectl config view |grep server
+ kubectl --context=DevDan-context get pods
+ kubectl --context=ProdDan-context get pods
+ kubectl create deployment hog --image vish/stress
+ kubectl create deployment nginx --image=nginx
+ kubectl create deployment two --image=nginx --dry-run -o yaml
+ kubectl create -f car-map.yaml
+ kubectl create -f crd.yaml
+ kubectl create -f https://bit.ly/2G4e9Hu
+ kubectl create -f ingress.rbac.yaml
+ kubectl create -f metrics-server/deploy/1.8+/
+ kubectl create namespace sock-shop
+ kubectl create ns development
+ kubectl delete configmap fast-car colors
+ kubectl delete cronjobs.batch sleepy
+ kubectl delete deployment nginx
+ kubectl delete deployments nginx
+ kubectl delete ds ds-two
+ kubectl delete ep nginx
+ kubectl delete -f complete-demo.yaml
+ kubectl delete po curlpod
+ kubectl delete pod shell-demo
+ kubectl delete pods vip other
+ kubectl delete po -l system=IsolatedPod
+ kubectl delete po nginx-1423793266-7f1qw
+ kubectl delete pvc pvc-one
+ kubectl delete pv pvvol-1
+ kubectl delete pv/pvvol-1
+ kubectl delete rs rs-one --cascade=false
+ kubectl delete svc nginx
+ kubectl describe crd crontab<Tab>
+ kubectl describe ct
+ kubectl describe deployment hog
+ kubectl describe deployment nginx
+ kubectl describe ds |grep Image:
+ kubectl describe jobs.batch sleepy
+ kubectl describe node | grep -i taint
+ kubectl describe node lfs458-node-1a0a
+ kubectl describe nodes |grep -i label
+ kubectl describe nodes |grep -i taint
+ kubectl describe ns small
+ kubectl describe pod nginx-nfs-1054709768-s8g28
+ kubectl describe po ds-two-8lx7k |grep Image:
+ kubectl describe rs rs-one
+ kubectl describe secret default-token-jdqp7
+ kubectl drain lfs458-worker
+ kubectl drain lfs458-worker --ignore-daemonsets
+ kubectl edit ds ds-two
+ kubectl edit ingress ingress-test
+ kubectl edit po rs-one-3c6pb
+ kubectl exec -it thirdpage-5cf8d67664-zcmfh -- /bin/bash
+ kubectl expose deployment/nginx
+ kubectl expose deployment nginx --type=LoadBalancer
+ kubectl expose -h
+ kubectl get configmap colors
+ kubectl get configmap colors -o yaml
+ kubectl get crd
+ kubectl get cronjobs.batch
+ kubectl get CronTab
+ kubectl get ct
+ kubectl get deployment
+ kubectl get deployment --all-namespaces
+ kubectl get deployment hog -o yaml
+ kubectl get deployment nginx
+ kubectl get deployment nginx --export -o json
+ kubectl get deployment nginx -o yaml
+ kubectl get deployment nginx -o yaml > first.yaml
+ kubectl get deployments
+ kubectl get deployments --all-namespaces
+ kubectl get deployments nginx --export -o yaml
+ kubectl get deployments secondapp -o yaml |grep label -A2
+ kubectl get deployment thirdpage -o yaml |grep -A2 Label
+ kubectl get deploy --namespace=small
+ kubectl get deploy,pod
+ kubectl get ds
+ kubectl get ds ds-one -o yaml
+ kubectl get ds ds-one -o yaml --export > ds2.yaml
+ kubectl get endpoints
+ kubectl get ep
+ kubectl get ep nginx
+ kubectl get events
+ kubectl get job
+ kubectl get jobs
+ kubectl get jobs.batch
+ kubectl get jobs.batch sleepy -o yaml
+ kubectl get job sleepy -o yaml
+ kubectl get LimitRange
+ kubectl get LimitRange --all-namespaces
+ kubectl get namespace
+ kubectl get node
+ kubectl get nodes
+ kubectl get nodes --show-labels
+ kubectl get po
+ kubectl get po --all-namespaces
+ kubectl get pod
+ kubectl get pods
+ kubectl get pods --all-namespaces
+ kubectl get pods -l app=nginx --all-namespaces
+ kubectl get po -L system
+ kubectl get po -o wide
+ kubectl get pv
+ kubectl get pvc
+ kubectl get pv/pvvol-1
+ kubectl get pv/pvvol-1 -o yaml
+ kubectl get rs
+ kubectl get secrets
+ kubectl get secrets --all-namespaces
+ kubectl get svc
+ kubectl get svc --all-namespaces
+ kubectl get svc nginx
+ kubectl get svc -n sock-shop
+ kubectl label node lfs458-worker systemnode/
+ kubectl label nodes lfs458-node-1a0a status=vip
+ kubectl label nodes lfs458-worker status=other
+ kubectl logs hog-1603763060-x3vnn
+ kubectl -n accounting delete deploy nginx-one
+ kubectl -n accounting delete pods -l app=nginx
+ kubectl -n accounting expose deployment nginx-one
+ kubectl -n accounting get deploy --show-labels
+ kubectl -n accounting get ep nginx-one
+ kubectl -n kube-s<Tab> g<Tab> po<Tab>
+ kubectl -n kube-system describe secrets kubernetes-dashboard-token-<Tab>
+ kubectl -n kube-system edit deployment metrics-server
+ kubectl -n kube-system edit svc kubernetes-dashboard
+ kubectl -n kube-system get svc kubernetes-dashboard
+ kubectl -n kube-system logs metrics-server<TAB>
+ kubectl -n kube-system logs <Tab><Tab>
+ kubectl -n low-usage-limit delete deployment hog
+ kubectl -n production describe role dev-prod
+ kubectl -n small delete pvc/pvc-one
+ kubectl -n small describe deploy/nginx-nfs
+ kubectl -n small edit resourcequota
+ kubectl proxy --api-prefix=/
+ kubectl proxy --api-prefix=/ &
+ kubectl proxy -h
+ kubectl replace -f first.yaml
+ kubectl rollout history ds ds-one
+ kubectl rollout history ds ds-one --revision=1
+ kubectl rollout history ds ds-one --revision=2
+ kubectl rollout history ds ds-two
+ kubectl rollout history ds ds-two --revision=2
+ kubectl rollout status ds ds-two
+ kubectl rollout undo ds ds-one --to-revision=1
+ kubectl scale deployment nginx --replicas=0
+ kubectl scale deployment nginx --replicas=2
+ kubectl scale deployment nginx --replicas=3
+ kubectl set image ds ds-one nginx=nginx:1.12.1-alpine
+ kubectl taint nodes lfs458-worker bubbanode/
+ kubectl top nodes
+ kubectl top pods --all-namespaces
+ kubectl uncordon lfs458-worker
+ strace kubectl get endpoints
