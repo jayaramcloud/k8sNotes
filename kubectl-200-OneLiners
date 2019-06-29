@@ -105,6 +105,7 @@ kubectl get pvc
 kubectl get pv/pvvol-1
 kubectl get pv/pvvol-1 -o yaml
 kubectl get rs
+kubectl get sa,roles,rolebindings,clusterroles,clusterrolebindings --all-namespaces -o json
 kubectl get secrets
 kubectl get secrets --all-namespaces
 kubectl get svc
