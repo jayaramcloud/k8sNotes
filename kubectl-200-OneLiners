@@ -206,3 +206,5 @@ kubectl taint nodes --all node-role.kubernetes.io/masternode/
 kubectl taint nodes lfs458-worker bubba=value:NoExecute
 kubectl taint nodes lfs458-worker bubba=value:NoSchedule
 kubectl taint nodes lfs458-worker bubba=value:PreferNoSchedule
+
+jayaram_linux1@cloudshell:~/.kube/cache/discovery/75b49fce_c7b5_41a2_8fa2_7f1c7a97cd22.k8s.ondigitalocean.com/apps/v1 (dbconn01)$ python -m json.tool serverresources.json  | grep kind
