@@ -1,3 +1,8 @@
+
+
+kubectl api-resources
+kubectl api-versions
+
 kubectl apply -f calico.yaml
 kubectl apply -f rbac-kdd.yaml
 kubectl apply -f rolebindprod.yaml
