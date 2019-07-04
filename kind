@@ -1,3 +1,50 @@
+If you are working on multiple kubernetes clusters running with different versions, its hard to remember apiVersion for kubernetes objects.This can be sorted out by using following commands
+  kubectl api-resources : This will show kubernetes objects, their short names, kind and whether they can be namespaced. Here we can get apiGroup of the object we are looking for. If apiGroup is empty, it means object belongs to core api group(v1)
+   We can look for versions available for given api group by using kubectl api-versions command 
+
+  kubectl api-versions
+  admissionregistration.k8s.io/v1beta1
+  apiextensions.k8s.io/v1beta1
+  apiregistration.k8s.io/v1
+  apiregistration.k8s.io/v1beta1
+  apps/v1
+  apps/v1beta1
+  apps/v1beta2
+  extensions/v1beta1
+  
+  Order of kubernetes feature maturity:  v1alpha1 - v1alpha2..v1alphaN - v1beta1 - v1beta2..v1betaN - v1, we should always take latest version available.
+  Looking at above, we can say deployment object apiVersion is  apiVersion: apps/v1
+
+
+jayaram_linux1@cloudshell:~ (dbconn01)$ kubectl api-resources | grep pod
+pods                              po                                          true         Pod
+podtemplates                                                                  true         PodTemplate
+horizontalpodautoscalers          hpa          autoscaling                    true         HorizontalPodAutoscaler
+podsecuritypolicies               psp          extensions                     false        PodSecurityPolicy
+pods                                           metrics.k8s.io                 true         PodMetrics
+poddisruptionbudgets              pdb          policy                         true         PodDisruptionBudget
+podsecuritypolicies               psp          policy                         false        PodSecurityPolicy
+jayaram_linux1@cloudshell:~ (dbconn01)$ kubectl api-resources | grep deployments
+deployments                       deploy       apps                           true         Deployment
+deployments                       deploy       extensions                     true         Deployment
+jayaram_linux1@cloudshell:~ (dbconn01)$ kubectl api- | grep pod
+api-resources  api-versions
+jayaram_linux1@cloudshell:~ (dbconn01)$ kubectl api-versions | grep pod
+jayaram_linux1@cloudshell:~ (dbconn01)$ kubectl api-versions | grep deployments
+
+root@master2:~/etcd-v3.3.1-linux-amd64# kubectl api-resources  | grep pod
+pods                              po                                          true         Pod
+podtemplates                                                                  true         PodTemplate
+horizontalpodautoscalers          hpa          autoscaling                    true         HorizontalPodAutoscaler
+podsecuritypolicies               psp          extensions                     false        PodSecurityPolicy
+poddisruptionbudgets              pdb          policy                         true         PodDisruptionBudget
+podsecuritypolicies               psp          policy                         false        PodSecurityPolicy
+root@master2:~/etcd-v3.3.1-linux-amd64# kubectl api-versions  | grep pod
+root@master2:~/etcd-v3.3.1-linux-amd64# kubectl api-resources  | grep deployment
+deployments                       deploy       apps                           true         Deployment
+deployments                       deploy       extensions                     true         Deployment
+root@master2:~/etcd-v3.3.1-linux-amd64# kubectl api-versions  | grep deplolyment
+
 master $ k api-resources -o wide | cut -c92-120 | sort | uniq | grep -v KIND
 APIService
 Binding
