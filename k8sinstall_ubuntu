@@ -3,6 +3,8 @@ https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
+swapoff -a
+vi /etc/fstab and enter an # at the begining of the swap fs.
 apt-get update && apt-get install apt-transport-https ca-certificates curl software-properties-common -y
 apt-get upgrade -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
@@ -59,5 +61,7 @@ kubectl get nodes
 
 kubeadm join 10.128.0.15:6443 --token mdzx06.yyoeqmwj66rv2kolk8p \
     --discovery-token-ca-cert-hash sha256:f1eda2eac739dfd67d1fwvwwefb150ef2102cdc714f83e7cd86be8fd635aea436466d9b
+
+kubectl get componentstatus
 
 docker run -it --privileged --net=host   -v /:/rootfs -v $CONFIG_DIR:$CONFIG_DIR -v $LOG_DIR:/var/result   k8s.gcr.io/node-test:0.2
