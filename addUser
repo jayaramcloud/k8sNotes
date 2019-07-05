@@ -1,0 +1,70 @@
+https://medium.com/faun/how-to-pass-certified-kubernetes-administrator-cka-exam-on-first-attempt-36c0ceb4c9e
+
+Cluster Roles: Practice creating a user and give him enough permissions using cluster role and role binding concepts to access the clusters k8s services. Practice creating a user from scratch, which should also include creating enough certs for the user. Below are the steps to add user by creating certs and allowing him/her to access k8s cluster services based on roles. This document demonstrates to add user to an already existing Kubernetes cluster, practicing below steps would be a good exercise for CKA exam.
+
+1) Initially lets start by creating a directory users, "mkdir -p  ~/.kube/users", now generate a private key for each users and store them in a directory that was just created (~/.kube/users), using these private keys generate csr (the csr cert contains user names and groups),for ex user is "prudhvi", now this user will be added to the cluster by the following steps.
+#Generate a private key --prudhvi.key
+openssl genrsa -out prudhvi.key 2048
+#Generate a csr file for prudhvi as user --prudhvi.csr
+openssl req -new -key prudhvi.key -out prudhvi.csr -subj "/CN=prudhvi/O=ops/O=example.org"
+2) Now copy the clusters ca.key and ca.pem files to users folder that was just created from previous step and sign them to users, copy ca.key and ca.pem from /etc/kubernetes/pki to ~/.kube/users.
+#Input as csr file, output is .crt 
+openssl x509 -req -CA ca.pem -CAkey ca-key.pem -CAcreateserial -days 730 -in prudhvi.csr -out prudhvi.crt
+3) Setting up cluster configuration for the user "prudhvi" in a particular namespace, the namespace is optional and should be used if required for the user to use a particular namespace, by default the "default" namespace is used.
+kubectl config set-credentials prudhvi --client-certificate=/absolute/path/to/prudhvi.crt --client-key=/absolute/path/to/prudhvi.key
+#For below step use "user-nameofthecluster" that we just created "prudhvi-prod"
+kubectl config set-context user-nameofthecluster --cluster=prod --user=prudhvi --namespace=<>
+kubectl config get-contexts ---->switch the context kubectl config use-context prudhvi-prod 
+#Another example for the above step is kubectl config set-context yono-dev --namepsaces=development
+kubectl config use-context prudhvi-prod
+ 
+ 4) After we switch the cluster context to prudhvi-prod, the user (prudhvi) will still not be having access to use "kubectl get pods", for accessing the cluster services lets start to create Role&RoleBinding.
+apiVersion: rbac.authorization.k8s.io/v1 
+kind: Role
+metadata:
+  name: user-role
+#if required specify a particular namespace.
+  namespace: <>
+rules:
+#below are rules for all the resources inside a required namespace.
+- apiGroups: ["*"]
+#below resources objects examples are services, deployments, pv, pvc ..
+  resources: ["*"]
+#below we shall provide read only access
+  verbs:
+   - get
+   - list
+   - watch
+ 
+#Map to the user by creating rolebinding:
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: user-role
+  namespace: <>
+roleRef:
+  kind: Role
+  name: interns
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+#bind it to either groups or service accounts
+- kind: Group
+  name: interns 
+  namespace: nexus
+  apiGroup: rbac.authorization.k8s.io
+  
+5)Clusterrolebinding is for all namespaces inside the cluster.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: inters
+  namespace: <>
+roleRef:
+  kind: Role
+#Example is "user-role" that we just created above.
+  name: <nameofclusterrole>
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: Group
+  name: ops
+  namespace: <>
