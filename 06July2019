@@ -1,0 +1,12 @@
+
+ 1007  k run poda  --image=nginx --restart=Never -o yaml --dry-run > pod.yaml
+ 1009  k run poda  --image=nginx -o yaml --dry-run > depa.yaml
+ 1012  k run poda  --image=nginx --restart=OnFailure -o yaml --dry-run > job.yaml
+ 1016  k run poda  --image=nginx --restart=OnFailure  --schedule="* * * * *"  -o yaml --dry-run > cronjob.yaml
+ 
+ kubectl run --restart=Never --image=busybox stat-bbox --dry-run -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+ 
+ k expose deployment shipping --type=NodePort --port=8080 --name=hr-web-app-service --dry-run -o yaml > hr-web-app-svc.yaml
+vi hr-web-app-svc.yaml
+ 
+ 
