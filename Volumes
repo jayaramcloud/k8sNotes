@@ -1,16 +1,17 @@
 
-k run poda  --image=nginx --restart=Never -o yaml --dry-run > pod.yaml
-k run poda  --image=nginx -o yaml --dry-run > depa.yaml
-k run poda  --image=nginx --restart=OnFailure -o yaml --dry-run > job.yaml
-k run poda  --image=nginx --restart=OnFailure  --schedule="* * * * *"  -o yaml --dry-run > cronjob.yaml
- 
-kubectl run --restart=Never --image=busybox stat-bbox --dry-run -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
- 
-kubectl expose pod messaging --port=6379 --name messaging-service
- 
-k expose deployment shipping --type=NodePort --port=8080 --name=hr-web-app-service --dry-run -o yaml > hr-web-app-svc.yaml
-vi hr-web-app-svc.yaml
-
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-analytics
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/pv/data-analytics"
+    
+https://theithollow.com/2019/03/04/kubernetes-persistent-volumes/
 
 apiVersion: v1
 kind: PersistentVolume
