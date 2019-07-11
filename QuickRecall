@@ -1,0 +1,206 @@
+
+
+
+resources:  # PER POD
+ limits:
+  cpu: "1"
+  memory: "4Gi"
+ requests:
+  cpu: "0.5"
+  memory: "500Mi"
+  
+ 
+  kind: LimitRange   # PER NAMESPACE
+spec:
+ limits:
+ - default:
+    cpu: 1
+    memory: 500Mi
+   defaultRequest:
+    cpu: 0.5
+    memory: 100Mi
+   type: Container
+   
+   CORDON = Unschedulable
+   Evict = Delete the pod , with a graceful timeout
+   kubectl --v=6 drain <node-name>
+   
+   env:
+   - name: ilike
+     valueFrom:
+       configMapKeyRef:
+        name: colors
+        key: favorite
+        
+spec:
+ containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: car-vol
+      mountPath: /etc/cars
+  volumes:
+   - name: car-vol
+     configMap:
+       name: fast-car
+       
+       
+
+kind: PersistentVolume
+metadata:
+name: pvvol-1
+spec:
+ capacity:
+  storage: 1Gi
+ accessModes:
+  - ReadWriteMany
+ persistentVolumeReclaimPolicy: Retain
+ nfs:
+  path: /opt/sfw
+  server: lfs458-node-1a0a #<-- Edit to match master node
+  readOnly: false
+  
+  
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+ name: pvc-one
+spec:
+ accessModes:
+ - ReadWriteMany
+ resources:
+  requests:
+   storage: 200Mi
+   
+spec:
+containers:
+ - image: nginx
+   imagePullPolicy: Always
+   name: nginx
+   volumeMounts:
+   - name: nfs-vol
+     mountPath: /opt
+    ports:
+    - containerPort: 80
+      protocol: TCP
+     resources: {}
+  volumes: #<<-- These four lines
+  - name: nfs-vol
+    persistentVolumeClaim:
+      claimName: pvc-one
+      
+kind: ResourceQuota
+metadata:
+name: storagequota
+spec:
+ hard:
+  persistentvolumeclaims: "10"
+  requests.storage: "500Mi"
+  
+  
+  
+  
+  
+  
+  
+
+kind: PersistentVolumeClaim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: do-block-storage
+
+Pod
+volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  volumes:
+    - name: cache-volume
+      emptyDir: {}
+Pod
+    volumeMounts:
+    - name: redis-storage
+      mountPath: /data/redis
+      readOnly: false
+  volumes:
+  - name: redis-storage
+    emptyDir: {}
+
+Pod
+volumeMounts:
+      - name: hostvolrun
+        mountPath: /myrun
+  volumes:
+  - name: hostvolrun
+    hostPath:
+      path: /var/run
+
+Pod
+volumeMounts:
+    - mountPath: /test-ebs
+      name: test-volume
+  volumes:
+  - name: test-volume
+    # This AWS EBS volume must already exist.
+    awsElasticBlockStore:
+      volumeID: <volume-id>
+      fsType: ext4
+
+volumeMounts:
+    - mountPath: /test-pd
+      name: test-volume
+  volumes:
+  - name: test-volume
+    # This GCE PD must already exist.
+    gcePersistentDisk:
+      pdName: my-data-disk
+      fsType: ext4
+
+
+kind: PersistentVolume
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 15Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+kind: PersistentVolumeClaim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+
+
+kind: PersistentVolume
+metadata:
+  name: nfs-backup-volume
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: "my-nfs-server"
+    path: "/my/nfs/jenkins-test"
+---
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-backup-volume-claim
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  selector:
+    matchLabels:
+      volume: nfs-backup-volume
