@@ -48,8 +48,8 @@ source <(kubectl completion bash)
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 alias k=kubectl
 complete -F __start_kubectl k
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/bc79dd1505b0c8681ece4de4c0d86c5cd2643275/Documentation/kube-flannel.yml
 
-kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml
 
 kubectl get nodes
 kubectl cluster-info
@@ -58,10 +58,11 @@ kubectl taint nodes --all node-role.kubernetes.io/master-
 kubectl get nodes
 
 #in the nodes
-
+echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 kubeadm join 10.128.0.15:6443 --token mdzx06.yyoeqmwj66rv2kolk8p \
     --discovery-token-ca-cert-hash sha256:f1eda2eac739dfd67d1fwvwwefb150ef2102cdc714f83e7cd86be8fd635aea436466d9b
 
+kubectl apply -f https://docs.projectcalico.org/v3.7/manifests/calico.yaml
 kubectl get componentstatus
 
 docker run -it --privileged --net=host   -v /:/rootfs -v $CONFIG_DIR:$CONFIG_DIR -v $LOG_DIR:/var/result   k8s.gcr.io/node-test:0.2
