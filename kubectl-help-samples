@@ -1,4 +1,6 @@
 for x in `kubectl -h | grep ^"  " | grep -v kubectl| cut -f3 -d" " | sort `; do echo $x ---;kubectl $x -h | egrep -E '  kubectl'  ; done
+another format: 
+for x in `kubectl -h | grep ^"  " | cut -f3 -d" " | sort | grep -v kubectl `; do echo $x ---------------- ; kubectl $x -h | egrep -E '  kubectl' | egrep -E '\[' ;done
 
 annotate ---
   kubectl annotate pods foo description='my frontend'
