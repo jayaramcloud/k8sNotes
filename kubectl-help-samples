@@ -1,0 +1,215 @@
+for x in `kubectl -h | grep ^"  " | grep -v kubectl| cut -f3 -d" " | sort `; do echo $x ---;kubectl $x -h | egrep -E '  kubectl'  ; done
+
+annotate ---
+  kubectl annotate pods foo description='my frontend'
+  kubectl annotate -f pod.json description='my frontend'
+  kubectl annotate --overwrite pods foo description='my frontend running nginx'
+  kubectl annotate pods --all description='my frontend running nginx'
+  kubectl annotate pods foo description='my frontend running nginx' --resource-version=1
+  kubectl annotate pods foo description-
+  kubectl annotate [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
+api-resources ---
+  kubectl api-resources
+  kubectl api-resources -o wide
+  kubectl api-resources --namespaced=true
+  kubectl api-resources --namespaced=false
+  kubectl api-resources --api-group=extensions
+  kubectl api-resources [flags] [options]
+api-versions ---
+  kubectl api-versions
+  kubectl api-versions [flags] [options]
+apply ---
+  kubectl apply -f ./pod.json
+  kubectl apply --prune -f manifest.yaml -l app=nginx
+  kubectl apply --prune -f manifest.yaml --all --prune-whitelist=core/v1/ConfigMap
+  kubectl apply -f FILENAME [options]
+attach ---
+  kubectl attach 123456-7890
+  kubectl attach 123456-7890 -c ruby-container
+  kubectl attach 123456-7890 -c ruby-container -i -t
+  kubectl attach rs/nginx
+  kubectl attach (POD | TYPE/NAME) -c CONTAINER [options]
+auth ---
+  kubectl auth [flags] [options]
+autoscale ---
+  kubectl autoscale deployment foo --min=2 --max=10
+  kubectl autoscale rc foo --max=5 --cpu-percent=80
+  kubectl autoscale (-f FILENAME | TYPE NAME | TYPE/NAME) [--min=MINPODS] --max=MAXPODS [--cpu-percent=CPU] [options]
+certificate ---
+  kubectl certificate SUBCOMMAND [options]
+cluster-info ---
+  kubectl cluster-info
+  kubectl cluster-info [flags] [options]
+completion ---
+  kubectl completion bash > $(brew --prefix)/etc/bash_completion.d/kubectl
+  kubectl completion bash > ~/.kube/completion.bash.inc
+  kubectl completion zsh > "${fpath[1]}/_kubectl"
+  kubectl completion SHELL [options]
+config ---
+  kubectl config SUBCOMMAND [options]
+convert ---
+  kubectl convert -f pod.yaml
+  kubectl convert -f pod.yaml --local -o json
+  kubectl convert -f . | kubectl create -f -
+  kubectl convert -f FILENAME [options]
+cordon ---
+  kubectl cordon foo
+  kubectl cordon NODE [options]
+cp ---
+  kubectl cp /tmp/foo_dir <some-pod>:/tmp/bar_dir
+  kubectl cp /tmp/foo <some-pod>:/tmp/bar -c <specific-container>
+  kubectl cp /tmp/foo <some-namespace>/<some-pod>:/tmp/bar
+  kubectl cp <some-namespace>/<some-pod>:/tmp/foo /tmp/bar
+  kubectl cp <file-spec-src> <file-spec-dest> [options]
+create ---
+  kubectl create -f ./pod.json
+  kubectl create -f docker-registry.yaml --edit -o json
+  kubectl create -f FILENAME [options]
+delete ---
+  kubectl delete -f ./pod.json
+  kubectl delete pod,service baz foo
+  kubectl delete pods,services -l name=myLabel
+  kubectl delete pod foo --now
+  kubectl delete pod foo --grace-period=0 --force
+  kubectl delete pods --all
+  kubectl delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [options]
+describe ---
+  kubectl describe nodes kubernetes-node-emt8.c.myproject.internal
+  kubectl describe pods/nginx
+  kubectl describe -f pod.json
+  kubectl describe pods
+  kubectl describe po -l name=myLabel
+  kubectl describe pods frontend
+  kubectl describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME) [options]
+diff ---
+  kubectl diff -f pod.json
+  kubectl diff -f FILENAME [options]
+drain ---
+  kubectl drain NODE [options]
+edit ---
+  kubectl edit svc/docker-registry
+  kubectl edit job.v1.batch/myjob -o json
+  kubectl edit deployment/mydeployment -o yaml --save-config
+  kubectl edit (RESOURCE/NAME | -f FILENAME) [options]
+exec ---
+  kubectl exec 123456-7890 date
+  kubectl exec 123456-7890 -c ruby-container date
+  kubectl exec 123456-7890 -c ruby-container -i -t -- bash -il
+  kubectl exec 123456-7890 -i -t -- ls -t /usr
+  kubectl exec POD [-c CONTAINER] -- COMMAND [args...] [options]
+explain ---
+  kubectl explain pods
+  kubectl explain pods.spec.containers
+  kubectl explain RESOURCE [options]
+expose ---
+  kubectl expose rc nginx --port=80 --target-port=8000
+  kubectl expose -f nginx-controller.yaml --port=80 --target-port=8000
+  kubectl expose pod valid-pod --port=444 --name=frontend
+  kubectl expose service nginx --port=443 --target-port=8443 --name=nginx-https
+  kubectl expose rc streamer --port=4100 --protocol=udp --name=video-stream
+  kubectl expose rs nginx --port=80 --target-port=8000
+  kubectl expose deployment nginx --port=80 --target-port=8000
+  kubectl expose (-f FILENAME | TYPE NAME) [--port=port] [--protocol=TCP|UDP|SCTP] [--target-port=number-or-name] [--name=name] [--external-ip=external-ip-of-service] [--type=type] [options]
+get ---
+  kubectl get pods
+  kubectl get pods -o wide
+  kubectl get replicationcontroller web
+  kubectl get deployments.v1.apps -o json
+  kubectl get -o json pod web-pod-13je7
+  kubectl get -f pod.yaml -o json
+  kubectl get -o template pod/web-pod-13je7 --template={{.status.phase}}
+  kubectl get rc,services
+  kubectl get rc/web service/frontend pods/web-pod-13je7
+  kubectl get [(-o|--output=)json|yaml|wide|custom-columns=...|custom-columns-file=...|go-template=...|go-template-file=...|jsonpath=...|jsonpath-file=...] (TYPE[.VERSION][.GROUP] [NAME | -l label] | TYPE[.VERSION][.GROUP]/NAME ...) [flags] [options]
+label ---
+  kubectl label pods foo unhealthy=true
+  kubectl label --overwrite pods foo status=unhealthy
+  kubectl label pods --all status=unhealthy
+  kubectl label -f pod.json status=unhealthy
+  kubectl label pods foo status=unhealthy --resource-version=1
+  kubectl label pods foo bar-
+  kubectl label [--overwrite] (-f FILENAME | TYPE NAME) KEY_1=VAL_1 ... KEY_N=VAL_N [--resource-version=version] [options]
+logs ---
+  kubectl logs nginx
+  kubectl logs nginx --all-containers=true
+  kubectl logs -lapp=nginx --all-containers=true
+  kubectl logs -p -c ruby web-1
+  kubectl logs -f -c ruby web-1
+  kubectl logs --tail=20 nginx
+  kubectl logs --since=1h nginx
+  kubectl logs job/hello
+  kubectl logs deployment/nginx -c nginx-1
+  kubectl logs [-f] [-p] (POD | TYPE/NAME) [-c CONTAINER] [options]
+patch ---
+  kubectl patch node k8s-node-1 -p '{"spec":{"unschedulable":true}}'
+  kubectl patch node k8s-node-1 -p $'spec:\n unschedulable: true'
+  kubectl patch -f node.json -p '{"spec":{"unschedulable":true}}'
+  kubectl patch pod valid-pod -p '{"spec":{"containers":[{"name":"kubernetes-serve-hostname","image":"new image"}]}}'
+  kubectl patch pod valid-pod --type='json' -p='[{"op": "replace", "path": "/spec/containers/0/image", "value":"new image"}]'
+  kubectl patch (-f FILENAME | TYPE NAME) -p PATCH [options]
+plugin ---
+  kubectl plugin [flags] [options]
+port-forward ---
+  kubectl port-forward pod/mypod 5000 6000
+  kubectl port-forward deployment/mydeployment 5000 6000
+  kubectl port-forward service/myservice 5000 6000
+  kubectl port-forward pod/mypod 8888:5000
+  kubectl port-forward --address 0.0.0.0 pod/mypod 8888:5000
+  kubectl port-forward --address localhost,10.19.21.23 pod/mypod 8888:5000
+  kubectl port-forward pod/mypod :5000
+  kubectl port-forward TYPE/NAME [options] [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N]
+proxy ---
+  kubectl proxy --port=8011 --www=./local/www/
+  kubectl proxy --port=0
+  kubectl proxy --api-prefix=/k8s-api
+  kubectl proxy [--port=PORT] [--www=static-dir] [--www-prefix=prefix] [--api-prefix=prefix] [options]
+replace ---
+  kubectl replace -f ./pod.json
+  kubectl get pod mypod -o yaml | sed 's/\(image: myimage\):.*$/\1:v4/' | kubectl replace -f -
+  kubectl replace --force -f ./pod.json
+  kubectl replace -f FILENAME [options]
+rollout ---
+  kubectl rollout undo deployment/abc
+  kubectl rollout status daemonset/foo
+  kubectl rollout SUBCOMMAND [options]
+run ---
+  kubectl run nginx --image=nginx
+  kubectl run hazelcast --image=hazelcast --port=5701
+  kubectl run hazelcast --image=hazelcast --env="DNS_DOMAIN=cluster" --env="POD_NAMESPACE=default"
+  kubectl run hazelcast --image=hazelcast --labels="app=hazelcast,env=prod"
+  kubectl run nginx --image=nginx --replicas=5
+  kubectl run nginx --image=nginx --dry-run
+  kubectl run nginx --image=nginx --overrides='{ "apiVersion": "v1", "spec": { ... } }'
+  kubectl run -i -t busybox --image=busybox --restart=Never
+  kubectl run nginx --image=nginx -- <arg1> <arg2> ... <argN>
+  kubectl run nginx --image=nginx --command -- <cmd> <arg1> ... <argN>
+  kubectl run pi --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle 'print bpi(2000)'
+  kubectl run pi --schedule="0/5 * * * ?" --image=perl --restart=OnFailure -- perl -Mbignum=bpi -wle 'print bpi(2000)'
+  kubectl run NAME --image=image [--env="key=value"] [--port=port] [--replicas=replicas] [--dry-run=bool] [--overrides=inline-json] [--command] -- [COMMAND] [args...] [options]
+scale ---
+  kubectl scale --replicas=3 rs/foo
+  kubectl scale --replicas=3 -f foo.yaml
+  kubectl scale --current-replicas=2 --replicas=3 deployment/mysql
+  kubectl scale --replicas=5 rc/foo rc/bar rc/baz
+  kubectl scale --replicas=3 statefulset/web
+  kubectl scale [--resource-version=version] [--current-replicas=count] --replicas=COUNT (-f FILENAME | TYPE NAME) [options]
+set ---
+  kubectl set SUBCOMMAND [options]
+taint ---
+  kubectl taint nodes foo dedicated=special-user:NoSchedule
+  kubectl taint nodes foo dedicated:NoSchedule-
+  kubectl taint nodes foo dedicated-
+  kubectl taint node -l myLabel=X  dedicated=foo:PreferNoSchedule
+  kubectl taint NODE NAME KEY_1=VAL_1:TAINT_EFFECT_1 ... KEY_N=VAL_N:TAINT_EFFECT_N [options]
+top ---
+  kubectl top [flags] [options]
+uncordon ---
+  kubectl uncordon NODE [options]
+version ---
+  kubectl version
+  kubectl version [flags] [options]
+wait ---
+  kubectl wait --for=condition=Ready pod/busybox1
+  kubectl delete pod/busybox1
+  kubectl wait --for=delete pod/busybox1 --timeout=60s
+  kubectl wait resource.group/name [--for=delete|--for condition=available] [options]
