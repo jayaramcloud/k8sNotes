@@ -1,0 +1,79 @@
+systemctl daemon-reload
+systemctl enable <service_name>
+systemctl start <service_name>
+systemctl status <service_name> <-- quite handy to look up for location of the systemd service file 
+
+systemctl enable kubelet && systemctl start kubelet
+systemctl daemon-reload
+systemctl restart kubelet
+
+sudo systemctl restart kubelet
+sudo systemctl daemon-reload
+sudo systemctl start docker
+sudo systemctl enable docker.service
+
+systemctl daemon-reload
+systemctl start kubelet.service
+systemctl enable kubelet.service
+systemctl status -l kubelet.service
+
+systemctl daemon-reload
+systemctl start kube-controller-manager.service
+systemctl enable kube-controller-manager.service
+systemctl status -l kube-controller-manager.service
+
+systemctl enable kube-apiserver
+systemctl start kube-apiserver
+
+RESTART Kubernetes Master Services
+for SERVICES in etcd kube-apiserver kube-controller-manager kube-scheduler flanneld; do
+	systemctl restart $SERVICES
+	systemctl enable $SERVICES
+	systemctl status $SERVICES
+done
+
+RESTART kubelet/node services
+
+for SERVICES in kube-proxy kubelet flanneld docker; do
+    systemctl restart $SERVICES
+    systemctl enable $SERVICES
+    systemctl status $SERVICES
+done
+
+Master: On your kubernetes master server, this will tell you if the proper services are active and enabled (flanneld may not be configured on your system):
+
+# for SERVICES in etcd flanneld kube-apiserver kube-controller-manager kube-scheduler;
+    do echo --- $SERVICES --- ; systemctl is-active $SERVICES ;
+    systemctl is-enabled $SERVICES ; echo "";  done
+--- etcd ---
+active
+enabled
+--- flanneld ---
+active
+enabled
+--- kube-apiserver ---
+active
+enabled
+--- kube-controller-manager ---
+active
+enabled
+--- kube-scheduler ---
+active
+enabled
+Nodes: On each node, make sure the proper services are active and enabled:
+
+# for SERVICES in flanneld docker kube-proxy.service kubelet.service; \
+do echo --- $SERVICES --- ; systemctl is-active $SERVICES ; \
+systemctl is-enabled $SERVICES ; echo "";  done
+--- flanneld ---
+active
+enabled
+--- docker ---
+active
+enabled
+--- kube-proxy.service ---
+active
+enabled
+--- kubelet.service ---
+active
+enabled
