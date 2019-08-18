@@ -67,6 +67,8 @@ kubectl exec -it thirdpage-5cf8d67664-zcmfh -- /bin/bash
 kubectl expose deployment/nginx
 kubectl expose deployment nginx --type=LoadBalancer
 kubectl expose -h
+kubectl get all
+kubectl get all --show-kind
 kubectl get configmap colors
 kubectl get configmap colors -o yaml
 kubectl get crd
