@@ -140,6 +140,9 @@ kubectl -n production describe role dev-prod
 kubectl -n small delete pvc/pvc-one
 kubectl -n small describe deploy/nginx-nfs
 kubectl -n small edit resourcequota
+kubectl port-forward  pod/xtornado-b56c5bbfd-6f8p5 8120:8888
+kubectl port-forward  service/xtornado 8123:80
+  # service port is running in port 80 (targetPort 8888 is the container port) . then curl localhost:8123
 kubectl proxy --api-prefix=/
 kubectl proxy --api-prefix=/ &
 kubectl proxy -h
