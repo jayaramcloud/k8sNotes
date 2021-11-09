@@ -1,0 +1,89 @@
+
+[root@server51 ~]# mkdir docker
+[root@server51 ~]# cd docker/
+[root@server51 ~]# mkdir app
+[root@server51 ~]# cd app
+
+...
+[root@server51 app]# ls
+app.py  requirements.txt
+[root@server51 app]# cat app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return "Demo Flask & Docker application is up and running!"
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=80)
+[root@server51 app]#
+[root@server51 app]# cat requirements.txt
+flask
+
+...
+[root@server51 docker]# vi Dockerfile
+[root@server51 docker]# cat Dockerfile
+FROM python
+
+WORKDIR /opt/demo/
+COPY /app .
+
+RUN pip install -r requirements.txt
+
+ENTRYPOINT python app.py
+[root@server51 docker]# docker login docker.io
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: canada
+Password:
+Login Succeeded
+[root@server51 docker]# ls
+app  Dockerfile
+
+
+[root@server51 docker]# docker build -t docker.io/canada/flask:0.5 .
+Sending build context to Docker daemon 4.608 kB
+Step 1/5 : FROM python
+ ---> 4246fb19839f
+Step 2/5 : WORKDIR /opt/demo/
+ ---> Using cache
+ ---> 30c9b8cc9521
+Step 3/5 : COPY /app .
+ ---> Using cache
+ ---> 7c043ab0447a
+Step 4/5 : RUN pip install -r requirements.txt
+ ---> Using cache
+ ---> 10fa13502209
+Step 5/5 : ENTRYPOINT python app.py
+ ---> Using cache
+ ---> c0d19fd47db5
+Successfully built c0d19fd47db5
+
+
+[root@server51 docker]# docker run -d -p 80:80 docker.io/canada/flask:0.5
+
+[root@server51 docker]# curl localhost:80
+Demo Flask & Docker application is up and running!
+
+[root@server51 docker]# docker push docker.io/canada/flask:0.5
+The push refers to a repository [docker.io/canada/flask]
+83c25d7c534d: Pushed
+73382c27f213: Pushed
+f1e7a1c8274c: Pushed
+636159d907db: Mounted from library/python
+485115e86f04: Mounted from library/python
+30f3545290f2: Mounted from library/python
+7fcd2600f5ad: Mounted from library/python
+8f56c3340629: Mounted from library/python
+ba6e5ff31f23: Mounted from library/python
+9f9f651e9303: Mounted from library/python
+0b3c02b5d746: Mounted from library/python
+62a747bf1719: Mounted from library/python
+0.5: digest: sha256:ac75b4350bc3f1055e3be117550216da8b4638b466270699e393e0c6cb46049b size: 2843
+[root@server51 docker]# docker image ls
+REPOSITORY                                             TAG                 IMAGE ID            CREATED             SIZE
+docker.io/canada/flask                                 0.5                 c0d19fd47db5        6 minutes ago       928 MB
+
+
+vist: https://hub.docker.com/repository/docker/canada/flask
