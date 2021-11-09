@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  namespace: default
+  labels:
+    app: flask
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: flask
+        image: docker.io/canada/flask/flask:0.5
+        # as docker.io is the default, we can also have 
+        # image: canada/flask/flask:0.5
+        ports:
+        - containerPort: 80
+
