@@ -12,11 +12,4 @@ spec:
     # Visit https://hub.docker.com/_/nginx
     ports:
     - containerPort: 80
-    resources:
-      limits:
-        cpu: 1000m
-        memory: 500Mi           
-      requests:
-        cpu: 500m
-        memory: 100Mi
         
