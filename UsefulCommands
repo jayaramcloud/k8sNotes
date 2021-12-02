@@ -14,57 +14,52 @@ kubectl set image deployment/guestbook guestbook=ibmcom/guestbook:v2
 kubectl expose deployment guestbook --type=LoadBalancer --port 80 --target-port 3000
 
 
-k create deployment kuard --image=gcr.io/kuar-demo/kuard-amd64:1
+kubectl create deployment kuard --image=gcr.io/kuar-demo/kuard-amd64:1
 kubectl expose deployment kuard --type=LoadBalancer --port=80 --target-port=8080
 
 
-k get all
-k get pods,nodes,svc,deployments,ns
-k describe pods,nodes,svc,deployments
-k config get-contexts
-k config current-context
-k cluster-info
-k cluster-info  dump
-k get componentstatuses
-k get pods -o wide
-k get pod guestbook-84457db45c-cllfb -o yaml --export
-k edit deployments guestbook -o yaml
+kubectl get all
+kubectl get pods,nodes,svc,deployments,ns
+kubectl describe pods,nodes,svc,deployments
+kubectl config get-contexts
+kubectl config current-context
+kubectl cluster-info
+kubectl cluster-info  dump
+kubectl get componentstatuses
+kubectl get pods -o wide
+kubectl get pod guestbook-84457db45c-cllfb -o yaml --export
+kubectl edit deployments guestbook -o yaml
 
-k exec -it hello-web-6c84597998-nmshl -- /bin/sh
+kubectl exec -it hello-web-6c84597998-nmshl -- /bin/sh
 
 
-k apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard.yaml
-k proxy
-k proxy --address 0.0.0.0 --accept-hosts '.*'
+kubectl explain service
 
-k explain service
-
-k api-resources
-k api-resources --namespaced=true
+kubectl api-resources
+kubectl api-resources --namespaced=true
 for x in `kubectl api-resources --verbs=list --namespaced -o name`;do echo ---------------------- $x; kubectl get $x;done
 for x in `kubectl api-resources | cut -f1 -d" "`;do echo ---------------------- $x; kubectl get $x;done
 
-k api-versions
-k get apiservices.apiregistration.k8s.io
-k api-resources --api-group=extensions
-k create -f mypod.yml --dry-run
+kubectl get apiservices.apiregistration.k8s.io
+kubectl api-resources --api-group=extensions
+kubectl create -f mypod.yml --dry-run
 
-k get pods --all-namespaces  --show-labels
-k get pods --all-namespaces  --show-labels -l k8s-app=glbc
+kubectl get pods --all-namespaces  --show-labels
+kubectl get pods --all-namespaces  --show-labels -l k8s-app=glbc
 
 less .kube/cache/discovery/
-k logs kube-dns-78d5dcc986-kdchg -n kube-system -o name
-k get crd
+kubectl logs kube-dns-78d5dcc986-kdchg -n kube-system -o name
+kubectl get crd
 
-k get pods --v=7 
-k get nodes --v=8 -o wide
-for x in `k get pods -o name | cut -f2 -d"/" `;do k --v=7 get pods $x;done
+kubectl get pods --v=7 
+kubectl get nodes --v=8 -o wide
+for x in `kubectl get pods -o name | cut -f2 -d"/" `;do k --v=7 get pods $x;done
 
-for x in `k get pods -o name | cut -f2 -d"/" `;do k logs  $x;done
+for x in `kubectl get pods -o name | cut -f2 -d"/" `;do k logs  $x;done
 
-k top pod
-k top pod guestbook-84457db45c-cllf
-k top node
+kubectl top pod
+kubectl top pod guestbook-84457db45c-cllf
+kubectl top node
 
 # List only worker nodes
 kubectl get node --selector='!node-role.kubernetes.io/master'
